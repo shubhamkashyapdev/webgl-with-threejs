@@ -1,6 +1,9 @@
 import './style.css'
 
 import * as THREE from 'three'
+
+// import the orbitcontrols class
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 
 // element
@@ -18,11 +21,10 @@ const cursor = {
   x: 0,
   y: 0,
 }
-window.addEventListener('mousemove', (e) => {
-  cursor.x = e.clientX / width - 0.5
-  cursor.y = -(e.clientY / height - 0.5)
-  console.log(cursor)
-})
+// window.addEventListener('mousemove', (e) => {
+//   cursor.x = e.clientX / width - 0.5
+//   cursor.y = -(e.clientY / height - 0.5)
+// })
 
 // new schene
 const scene = new THREE.Scene()
@@ -50,8 +52,13 @@ camera.position.z = 3
 camera.lookAt(mesh.position)
 scene.add(camera)
 
-// create a renderer
+// controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+// controls.target.y = 2
+// controls.update()
 
+// create a renderer
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
 })
@@ -73,9 +80,13 @@ const tick = () => {
   // mesh.rotation.y = elapsedTime
 
   // update the camera
-  camera.position.x = cursor.x * 10
-  camera.position.y = cursor.y * 10
-  camera.lookAt(mesh.position)
+  // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3
+  // camera.position.y = cursor.y * 5
+  // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3
+  // camera.lookAt(mesh.position)
+
+  // update controls if using the dumpint orbitcontrols
+  controls.update()
 
   // render the screen
   renderer.render(scene, camera)
