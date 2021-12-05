@@ -10,9 +10,10 @@ import gsap from 'gsap'
 const canvas = document.getElementById('webgl')
 // sizes
 const sizes = {
-  width: 800,
-  height: 600,
+  width: window.innerWidth,
+  height: window.innerHeight,
 }
+let { width, height } = sizes
 
 /**
  * Cursor
@@ -25,8 +26,32 @@ const cursor = {
 //   cursor.x = e.clientX / width - 0.5
 //   cursor.y = -(e.clientY / height - 0.5)
 // })
+window.addEventListener('resize', () => {
+  width = window.innerWidth
+  height = window.innerHeight
 
-// new schene
+  // update the camera
+  camera.aspect = width / height
+  camera.updateProjectionMatrix()
+  renderer.setSize(width, height)
+
+  // set devicepixelratio
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+})
+
+window.addEventListener('dblclick', () => {
+  // const fullscreenElement = document.fullscreenElement || document.webkitFullScreen;
+
+  if (!document.fullscreenElement) {
+    console.log('go full-screne')
+    canvas.requestFullscreen()
+  } else {
+    console.log('leave full-screen')
+    document.exitFullscreen()
+  }
+})
+
+// new scene
 const scene = new THREE.Scene()
 
 // simple box geometry
@@ -37,8 +62,6 @@ const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
 const mesh = new THREE.Mesh(geometry, material) // create a mesh with geometry & material
 
 scene.add(mesh)
-
-const { width, height } = sizes
 
 // camera
 
@@ -65,6 +88,7 @@ const renderer = new THREE.WebGLRenderer({
 
 // resize the renderer
 renderer.setSize(width, height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 // gsap animation
 // gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 })
