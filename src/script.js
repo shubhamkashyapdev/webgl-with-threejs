@@ -30,6 +30,18 @@ const { width, height } = sizes
 // Perspective Camera: 1. field of view (degree | vertical) 2. Aspect Ratio 3.
 // const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100)
 
+// Orthographic Camera: 1. left 2. right 3. top 4. bottom 5. near 6. far
+
+const aspectRatio = width / height
+const camera = new THREE.OrthographicCamera(
+  -1 * aspectRatio,
+  1 * aspectRatio,
+  1,
+  -1,
+  0.1,
+  100
+)
+
 camera.position.x = 2
 camera.position.y = 2
 camera.position.z = 2
